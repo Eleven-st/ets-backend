@@ -44,7 +44,7 @@ server.listen(port, () => {
 
 const connect = async () => {
     try {
-        mongoose.connect(process.env.MONGODB_URI);
+        mongoose.connect(process.env.MONGO_URI);
         console.log("Connected to MongoDB database");
     } catch (err) {
         throw err;
