@@ -1,2 +1,29 @@
-node_modules
-.env
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env                     # CRUCIAL: Never commit your environment variables!
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+
+# OS generated files
+.DS_Store                # macOS
+Thumbs.db                # Windows
+.terraform/              # Terraform local files
+.vscode/                 # VS Code settings (optional, if you want to ignore editor settings)
+.idea/                   # IntelliJ IDEA/WebStorm project files
+
+# Build output
+/build                   # If you have a build step that outputs to a 'build' folder
+/dist                    # Common distribution folder

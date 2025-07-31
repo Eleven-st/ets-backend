@@ -28,9 +28,9 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.use(cors());
-app.use("/auth", authRouter);
-app.use("/help-request", helpRequestRouter);
+//app.use(cors());
+app.use("/api/auth", authRouter);
+app.use("/api/help-request", helpRequestRouter);
 
 app.get("/healthcheck", (req, res) => {
     res.status(200).json({ sucess: true, message: "server is running" });
@@ -44,7 +44,7 @@ server.listen(port, () => {
 
 const connect = async () => {
     try {
-        mongoose.connect(process.env.MONGODB_URI);
+        mongoose.connect(process.env.MONGO_URI);
         console.log("Connected to MongoDB database");
     } catch (err) {
         throw err;
