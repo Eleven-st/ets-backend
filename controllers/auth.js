@@ -1,3 +1,5 @@
+// ets-backend/controllers/auth.js
+
 import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -107,7 +109,8 @@ export const verify_signup = async (req, res, next) => {
     const user = await User.create(userData);
     delete pendingVerifications[phone_no];
 
-    const token = jwt.sign(user._id.toString(), process.env.JWT_SECRET);
+    // Sign an object containing the user ID. You can also add an expiration (e.g., { expiresIn: '1h' })
+    const token = jwt.sign({ userId: user._id.toString() }, process.env.JWT_SECRET, { expiresIn: '1d' }); // Added expiration for security
 
     res.status(201).json({
       success: true,
@@ -187,7 +190,8 @@ export const verify_login = async (req, res, next) => {
         .json({ success: false, message: "User not found" });
     }
 
-    const token = jwt.sign(user._id.toString(), process.env.JWT_SECRET);
+    // Sign an object containing the user ID. You can also add an expiration (e.g., { expiresIn: '1h' })
+    const token = jwt.sign({ userId: user._id.toString() }, process.env.JWT_SECRET, { expiresIn: '1d' }); // Added expiration for security
 
     const public_user = {
       id: user._id.toString(),
@@ -220,9 +224,15 @@ export const get_user_profile = async (req, res, next) => {
     try {
         // req.user_id is set by the verify_token middleware if authentication is successful
         const userIdFromToken = req.user_id;
+        console.log("Backend: get_user_profile received userIdFromToken:", userIdFromToken); // NEW LOG
 
         // Fetch the user from the database
         const user = await User.findById(userIdFromToken);
+        console.log("Backend: User.findById result:", user ? "User found" : "User NOT found"); // NEW LOG
+        if (user) {
+            console.log("Backend: Found user with ID:", user._id); // Log the found user's ID
+        }
+
 
         if (!user) {
             return res.status(404).json({ success: false, message: "User profile not found." });
@@ -245,6 +255,7 @@ export const get_user_profile = async (req, res, next) => {
         res.status(200).json({ success: true, user_details: public_user });
 
     } catch (err) {
+        console.error("Backend: Error in get_user_profile:", err); // NEW LOG for errors
         next(err); // Pass any errors to the Express error handling middleware
     }
 };

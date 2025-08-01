@@ -20,7 +20,8 @@ export const verify_token = (req, res, next) => {
 
         const payload = jwt.verify(token, process.env.JWT_SECRET);
 
-        req.user_id = payload;
+       // Assuming payload is now an object like { userId: "..." }
+        req.user_id = payload.userId; // Extract the userId from the payload object
         next();
     } catch (err) {
         return next(create_request_error(403, "access token not valid"));
